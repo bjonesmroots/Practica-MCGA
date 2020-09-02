@@ -1,19 +1,32 @@
 import React from 'react';
-import './App.css';
-import css from './index.css';
+import Loading from './loading/loading'
+import Error from './error/error'
+import css from './app.module.css';
 import User from './user/user'
 class App extends React.Component {
   state = {
-    users: []
+    users: [],
+    loading: false,
+    error: undefined,
   }
 
   componentWillMount = async () => {
-    try {
+    try {      
+      this.setState({
+        loading: true,
+        error: undefined,
+      })
       const response = await fetch('https://jsonplaceholder.typicode.com/users')
       const list = await response.json();
-      this.setState({users : list}) 
+      this.setState({
+        users : list,
+        loading: false
+      }) 
     } catch(error) {
-      console.error(error);
+      this.setState({
+        loading: false,
+        error: error.toString(),
+      })
     }
   }
 
@@ -25,12 +38,24 @@ class App extends React.Component {
             Lista de usuarios
         </header>
         <section className={css.listSection}>
-          {this.state.users.map((user,index) => {
-            return <User key={index} name={user.name} phone={user.phone} email={user.email}></User>
+        {this.state.error && <Error message={this.state.error}/>}
+          {this.state.loading
+            ? <Loading />
+            :this.state.users.map((user,index) => {
+            return <User key={index} id={user.id} name={user.name} phone={user.phone} email={user.email} deleteUser={this.deleteUser}></User>
           })}
         </section>
       </div>
     );
+  }
+
+  deleteUser = (user_id) => {
+    const list = this.state.users.filter((user) => {
+        return user.id !== user_id;
+    })
+    this.setState({
+      users: list
+    })
   }
 }
 
