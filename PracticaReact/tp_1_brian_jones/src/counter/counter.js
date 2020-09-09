@@ -18,12 +18,31 @@ class Counter extends React.Component {
         return (
             <div className={css.counter}>
                 <div className={css.container}>
-                    <button className={css.buttonIncDec} onClick={this.decreaseCounter}>-</button>
-                    <span className={css.valor}>{this.state.valor}</span>
-                    <button className={css.buttonIncDec} onClick={this.increaseCounter}>+</button>
-                    <button className={css.button} onClick={() => {
-                        this.props.deleteCounter(this.props.id)
-                    }}>Eliminar</button>
+                    <button 
+                        className={css.buttonIncDec}
+                        onClick={this.decreaseCounter}
+                    >
+                        -
+                    </button>
+                    <span 
+                        className={css.valor}
+                    >
+                        {this.state.valor}
+                    </span>
+                    <button 
+                        className={css.buttonIncDec} 
+                        onClick={this.increaseCounter}
+                    >
+                        +
+                    </button>
+                    <button 
+                        className={css.button} 
+                        onClick={() => {
+                            this.props.deleteCounter(this.props.id)
+                        }}
+                    >
+                        Eliminar
+                    </button>
                 </div>
             </div>
         )
@@ -32,12 +51,12 @@ class Counter extends React.Component {
     increaseCounter = () => {
         this.setState({
             valor : this.state.valor + 1
-          }) 
+        }) 
     }
     decreaseCounter = () => {
         this.setState({
             valor : this.state.valor - 1
-          }) 
+        }) 
     }
 }
 export default Counter
