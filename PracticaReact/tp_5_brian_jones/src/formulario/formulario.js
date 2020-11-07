@@ -12,7 +12,7 @@ class Formulario extends React.Component {
                     <span className={css.titleAlumno}>Usuario:</span>            
                     <Field name="name" className={css.input} component="input" type="text" />
                     <Field name="email" className={css.input} component="input" type="text" />
-                    <button id="saveButton" className={css.button,css.buttonSave} onClick={this.saveNewUser}>Guardar Información</button>
+                    <button id="saveButton" className={css.buttonSave} onClick={this.saveNewUser}>Guardar Información</button>
                 </div>
               </section>
               <button 
