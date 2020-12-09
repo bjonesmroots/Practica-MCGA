@@ -1,5 +1,5 @@
 import React from 'react';
-import Usuarios from './usuarios/index'
+import Productos from './productos/index'
 import {
   BrowserRouter as Router,
   Switch,
@@ -13,13 +13,16 @@ function App() {
     <Router>
       <div>
         <Switch>
-          <Route exact path="/" component={Usuarios}>
+          <Route exact path="/" component={Productos}>
             
           </Route>
           <Route exact path="/formulario" component={Formulario}>
 
           </Route>
-          <Route path="*" component={Usuarios}>
+          <Route exact path="/formulario/:id/:nombre/:descripcion/:precio" component={Formulario}>
+
+          </Route>
+          <Route path="*" component={Productos}>
           
           </Route>
         </Switch>

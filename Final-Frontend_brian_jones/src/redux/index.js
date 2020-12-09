@@ -1,86 +1,158 @@
 import {createStore, applyMiddleware, combineReducers} from 'redux'
 import thunk from 'redux-thunk'
 import {reducer as formReducer } from 'redux-form'
+import {reducer as authReducer} from  './modulos/auth'
 
 const initialStore = {
-    isFetchingUsers: false,
+    isFetchingProductos: false,
     fail: false,
     lista: [],
 }
 
-export const addUser = (name, email) => {
+export const addProducto = (nombre, descripcion, precio) => {
     return {
-        type: 'ADD_USER',
-        name: name,
-        email: email
+        type: 'ADD_PRODUCTO',
+        nombre: nombre,
+        descripcion: descripcion,
+        precio: precio
     }
 }
 
-export const fetchUsers = () => {
+export const editProducto = (_id, nombre, descripcion, precio) => {
+    return {
+        type: 'EDIT_PRODUCTO',
+        _id: _id,
+        nombre: nombre,
+        descripcion: descripcion,
+        precio: precio
+    }
+}
+
+export const delProducto = (_id) => {
+    return {
+        type: 'DEL_PRODUCTO',
+        _id: _id,
+    }
+}
+
+export const fetchProductos = () => {
     return async (dispatch) => {
-        dispatch(fetchUsersPending());
+        dispatch(fetchProductosPending());
         try {
-            const response = await fetch("http://localhost:3001/users");
+            const response = await fetch("http://localhost:3001/productos");
             const data = await response.json();
-            return dispatch(fetchUsersSuccess(data));
+            return dispatch(fetchProductosSuccess(data));
         }
         catch (error) {
-            return dispatch(fetchUsersFail(error.toString()));
+            return dispatch(fetchProductosFail(error.toString()));
         }
     }
 }
 
-export const fetchUsersPending = () => {
+export const fetchProductosPending = () => {
     return {
-        type: "FETCH_USERS_PENDING",
+        type: "FETCH_PRODUCTOS_PENDING",
     }
 }
 
-export const fetchUsersSuccess = (data) => {
+export const fetchProductosSuccess = (data) => {
     return {
-        type: "FETCH_USERS_SUCCESS",
+        type: "FETCH_PRODUCTOS_SUCCESS",
         payload: data,
     }
 }
 
-export const fetchUsersFail = (error) => {
+export const fetchProductosFail = (error) => {
     return {
-        type: "FETCH_USERS_FAIL",
+        type: "FETCH_PRODUCTOS_FAIL",
         payload: error,
     }
 }
 
 const reducer = (store = initialStore, action) => {
     switch (action.type) {
-        case 'FETCH_USERS_SUCCESS': {
+        case 'FETCH_PRODUCTOS_SUCCESS': {
             return {
                 ...store,
                 lista: action.payload,
-                isFetchingUsers: false,
+                isFetchingProductos: false,
             };
         }
-        case 'FETCH_USERS_PENDING': {
+        case 'FETCH_PRODUCTOS_PENDING': {
             return {
                 ...store,
-                isFetchingUsers: true,
+                isFetchingProductos: true,
             };
         }
-        case 'FETCH_USERS_FAIL': {
+        case 'FETCH_PRODUCTOS_FAIL': {
             return {
                 ...store,
-                isFetchingUsers: false,
+                isFetchingProductos: false,
                 fail: true,
             };
         }
-        case 'ADD_USER': {
-            const newUsers = [...store.lista]
-            newUsers.push({
-                id: Date.now(),
-                name: action.name,
-                email: action.email
+        case 'ADD_PRODUCTO': {
+            let prod = JSON.stringify({
+                nombre: action.nombre,
+                descripcion: action.descripcion,
+                precio: parseFloat(action.precio)
+            });
+            fetch("http://localhost:3001/productos", {
+                method: 'post',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: prod
+            }).then((productoNuevo) => {
+                console.log('Producto Agregado');
+            }).catch((error) => {
+                console.log(error);
+            });
+            return {
+                ...store,
+            };
+        }
+        case 'EDIT_PRODUCTO': {
+            let prod = JSON.stringify({
+                nombre: action.nombre,
+                descripcion: action.descripcion,
+                precio: parseFloat(action.precio)
+            });
+            fetch("http://localhost:3001/productos?id="+action._id, {
+                method: 'put',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: prod
+            }).then((productoEditado) => {
+                console.log('Producto Editado');
+            }).catch((error) => {
+                console.log(error);
+            });
+            return {
+                ...store,
+            };
+        }
+        case 'DEL_PRODUCTO': {
+            const productos = [...store.lista]
+            fetch("http://localhost:3001/productos?id="+action._id, {
+                method: 'delete',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+            }).then((productoElimado) => {
+                console.log('Producto Eliminado');
+            }).catch((error) => {
+                console.log(error);
+            });
+            const list = productos.filter((producto) => {
+                return producto._id !== action._id;
             })
             return {
-                lista: newUsers
+                lista: list
             };
         }
         default:
@@ -89,8 +161,9 @@ const reducer = (store = initialStore, action) => {
 }
 
 const rootReducer = combineReducers({
-    users: reducer,
-    form: formReducer
+    productos: reducer,
+    form: formReducer,
+    auth: authReducer
 })
 
 export const store = createStore(rootReducer, applyMiddleware(thunk))
