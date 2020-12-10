@@ -7,7 +7,7 @@ router.route('/login')
     if (!req.body.email || typeof req.body.email !== 'string') {
         return res.status(400).send({message: 'Email invalido'});
       }
-      if (!req.body.password || typeof req.body.password !== 'number') {
+      if (!req.body.password || typeof req.body.password !== 'string') {
         return res.status(400).send({message: 'Password invalido'});
       }
     UsuarioSchema.findOne({email:req.body.email, password: req.body.password}).then((usuario) => {

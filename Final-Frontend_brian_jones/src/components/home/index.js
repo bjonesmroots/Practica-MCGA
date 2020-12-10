@@ -1,12 +1,13 @@
-import Productos from './productos'
+import Productos from './home'
 import { connect } from 'react-redux'
-import { fetchProductos } from '../redux'
+import { fetchProductos } from '../../redux'
 
 const mapStateToProps = (store) => {
     return {
         productos: store.productos.lista,
         isFetchingProductos: store.productos.isFetchingProductos,
-        fail: store.productos.fail
+        fail: store.productos.fail,
+        logged: store.auth.logged
     }
 }
 

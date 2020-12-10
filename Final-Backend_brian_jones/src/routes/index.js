@@ -4,7 +4,7 @@ const router = express.Router();
 const authRutas = require('./auth')
 const ProductoSchema = require('../schemas/productos')
 
-router.use('./auth', authRutas)
+router.use('/auth', authRutas)
 
 router.route('/')
   .get((req, res) => {

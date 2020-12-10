@@ -12,8 +12,8 @@ class Producto extends React.Component {
                     <b>Descripcion:</b> {this.props.item.descripcion}<br></br>
                     <b>Precio:</b> ${this.props.item.precio}<br></br>
                 </span>
-                <button className={css.button} onClick={this.editarProducto}>Editar</button>
-                <button className={css.button} onClick={this.deleteProducto}>Eliminar</button>
+                <button hidden={!this.props.logged} className={css.button} onClick={this.editarProducto}>Editar</button>
+                <button hidden={!this.props.logged} className={css.button} onClick={this.deleteProducto}>Eliminar</button>
             </div>
         )
     }

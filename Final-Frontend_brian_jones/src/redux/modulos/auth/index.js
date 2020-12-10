@@ -1,7 +1,3 @@
-import {createStore, applyMiddleware, combineReducers} from 'redux'
-import thunk from 'redux-thunk'
-import {reducer as formReducer } from 'redux-form'
-
 const initialStore = {
     isFetching: false,
     logged: false,
@@ -33,7 +29,34 @@ export const loginError = (error) => {
     }
 }
 
-const reducer = (store = initialStore, action) => {
+
+export const login = (email, password) => {
+    return (dispatch) => {
+        dispatch(loginFetching());
+        fetch("http://localhost:3001/auth/login", {
+                method: 'post',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({email: email, password: password})
+            }).then((response) => {
+                if (response.status === 200) {
+                    console.log('Usuario Logueado');
+                    return response.json();
+                } else {
+                    throw response;
+                }
+            }).then((data) => {
+                dispatch(loginSuccess(data))
+            }).catch((error) => {
+                console.log(error);
+                dispatch(loginError())
+            });
+    }
+}
+
+export const reducer = (store = initialStore, action) => {
     switch (action.type) {
         case LOGIN_FETCHING: {
             return {
@@ -45,14 +68,16 @@ const reducer = (store = initialStore, action) => {
             return {
                 ...store,
                 isFetching: false,
-                user: action.payload
+                user: action.payload,
+                logged: true,
             };
         }
         case LOGIN_ERROR: {
             return {
                 ...store,
                 isFetching: false,
-                error: action.payload
+                error: action.payload,
+                logged: false,
             };
         }
         default:

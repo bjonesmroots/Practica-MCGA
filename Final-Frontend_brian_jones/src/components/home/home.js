@@ -1,5 +1,5 @@
 import React from 'react';
-import css from './productos.module.css';
+import css from './home.module.css';
 import Producto from '../producto/index'
 
 class Productos extends React.Component {
@@ -12,6 +12,7 @@ class Productos extends React.Component {
     return (
       <div className={css.app}>
         <div className={css.container}>
+          <button className={css.button} onClick={this.loginLogout}>{this.props.logged ? "Logout" : "Login"}</button>
           <section className={css.listSection}>    
           <span className={css.listTitle}>Lista de Productos:</span>  
           <div>{this.props.isFetchingProductos && <span className={css.listTitle}>Cargando productos...</span>}</div>  
@@ -22,10 +23,18 @@ class Productos extends React.Component {
               })
             }
           </section>          
-          <button className={css.button} onClick={this.addProducto}>Agregar Producto</button>
+          <button hidden={!this.props.logged} className={css.button} onClick={this.addProducto}>Agregar Producto</button>
         </div>
       </div>
     );
+  }
+
+  loginLogout = () => {
+    if (this.props.logged) {
+      this.props.logged = false;
+    } else {
+      this.props.history.push("/login")
+    }
   }
 
   addProducto = () => {

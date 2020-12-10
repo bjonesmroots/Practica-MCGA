@@ -1,7 +1,7 @@
 import {createStore, applyMiddleware, combineReducers} from 'redux'
-import thunk from 'redux-thunk'
 import {reducer as formReducer } from 'redux-form'
 import {reducer as authReducer} from  './modulos/auth'
+import thunk from 'redux-thunk'
 
 const initialStore = {
     isFetchingProductos: false,
