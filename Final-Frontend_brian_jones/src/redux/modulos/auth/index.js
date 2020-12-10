@@ -7,6 +7,7 @@ const initialStore = {
 const LOGIN_FETCHING = 'LOGIN_FETCHING'
 const LOGIN_SUCCESS = 'LOGIN_SUCCESS'
 const LOGIN_ERROR = 'LOGIN_ERROR'
+const LOGOUT_USER = 'LOGOUT_USER'
 
 
 export const loginFetching = () => {
@@ -29,6 +30,11 @@ export const loginError = (error) => {
     }
 }
 
+export const logoutUser = () => {
+    return {
+        type: LOGOUT_USER,
+    }
+}
 
 export const login = (email, password) => {
     return (dispatch) => {
@@ -40,19 +46,23 @@ export const login = (email, password) => {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({email: email, password: password})
-            }).then((response) => {
-                if (response.status === 200) {
-                    console.log('Usuario Logueado');
-                    return response.json();
+            }).then(async (response) => {
+                const data = await response.json()
+                if(response.status === 200) {
+                    dispatch(loginSuccess(data))
                 } else {
-                    throw response;
+                    dispatch(loginError(data.message))
                 }
-            }).then((data) => {
-                dispatch(loginSuccess(data))
-            }).catch((error) => {
-                console.log(error);
-                dispatch(loginError())
-            });
+              })
+              .catch((error) => {
+                dispatch(loginError(error.message))
+              })
+    }
+}
+
+export const logout = () => {
+    return (dispatch) => {
+        dispatch(logoutUser());
     }
 }
 
@@ -62,6 +72,7 @@ export const reducer = (store = initialStore, action) => {
             return {
                 ...store,
                 isFetching: true,
+                error: ''
             };
         }
         case LOGIN_SUCCESS: {
@@ -70,6 +81,7 @@ export const reducer = (store = initialStore, action) => {
                 isFetching: false,
                 user: action.payload,
                 logged: true,
+                error: ''
             };
         }
         case LOGIN_ERROR: {
@@ -78,6 +90,14 @@ export const reducer = (store = initialStore, action) => {
                 isFetching: false,
                 error: action.payload,
                 logged: false,
+            };
+        }
+        case LOGOUT_USER: {
+            return {
+                ...store,
+                isFetching: false,
+                logged: false,
+                error: ''
             };
         }
         default:

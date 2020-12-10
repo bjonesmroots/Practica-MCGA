@@ -20,6 +20,12 @@
   color: #ffffff;
 }
 
+.loginError {
+  font-size: 20px;
+  font-weight: bold;
+  color: #ff6b6b;
+}
+
 .value, .input {
   display: flex;
   align-items: center;

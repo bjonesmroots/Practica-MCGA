@@ -19,7 +19,7 @@ class Producto extends React.Component {
     }
 
     editarProducto = () => {
-      this.props.history.push("/formulario/"+this.props.item._id+"/"+this.props.item.nombre+"/"+this.props.item.descripcion+"/"+this.props.item.precio)
+      this.props.history.push("/formulario/"+this.props.item._id)
     }
     deleteProducto = () => {
         this.props.borrarProducto(this.props.item._id);

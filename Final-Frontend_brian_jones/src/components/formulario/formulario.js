@@ -5,12 +5,23 @@ import { Field } from 'redux-form'
 class Formulario extends React.Component {
 
   componentWillMount = () => {
-    this.props.initialize({ 
-      _id: this.props.match.params.id,
-      nombre: this.props.match.params.nombre,
-      descripcion: this.props.match.params.descripcion,
-      precio: this.props.match.params.precio,
-    });
+    
+    if (!this.props.logged) {
+      this.props.history.push('/');
+    }
+    if (this.props.match.params.id) {
+      let productoEditado = this.props.productos.filter(obj => {
+        return obj._id === this.props.match.params.id
+      })
+      if (productoEditado) {
+        this.props.initialize({ 
+          _id: productoEditado[0]._id,
+          nombre: productoEditado[0].nombre,
+          descripcion: productoEditado[0].descripcion,
+          precio: productoEditado[0].precio,
+        });
+      }
+    }
   }
 
   render = () => {

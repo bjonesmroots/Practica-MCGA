@@ -14,9 +14,9 @@ class Productos extends React.Component {
         <div className={css.container}>
           <button className={css.button} onClick={this.loginLogout}>{this.props.logged ? "Logout" : "Login"}</button>
           <section className={css.listSection}>    
-          <span className={css.listTitle}>Lista de Productos:</span>  
-          <div>{this.props.isFetchingProductos && <span className={css.listTitle}>Cargando productos...</span>}</div>  
-          <div>{this.props.fail && <span className={css.listTitle}>Error al cargar productos...</span>}</div>  
+          {!this.props.isFetchingProductos && !this.props.fail && <span className={css.listTitle}>Lista de Productos:</span>}
+          {this.props.isFetchingProductos && <span className={css.listTitle}>Cargando productos...</span>} 
+          {this.props.fail && <span className={css.listTitle}>Error al cargar productos...</span>}
             {
               this.props.productos.map((producto) => {
                 return <Producto history={this.props.history} key={producto._id} item={producto}/>
@@ -31,7 +31,7 @@ class Productos extends React.Component {
 
   loginLogout = () => {
     if (this.props.logged) {
-      this.props.logged = false;
+      this.props.logout();
     } else {
       this.props.history.push("/login")
     }

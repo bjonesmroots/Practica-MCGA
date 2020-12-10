@@ -1,6 +1,7 @@
 import Productos from './home'
 import { connect } from 'react-redux'
 import { fetchProductos } from '../../redux'
+import { logout } from '../../redux/modulos/auth'
 
 const mapStateToProps = (store) => {
     return {
@@ -13,7 +14,8 @@ const mapStateToProps = (store) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        fetchProductos: () => dispatch(fetchProductos())
+        fetchProductos: () => dispatch(fetchProductos()),
+        logout:() => dispatch(logout())
     }
 }
 

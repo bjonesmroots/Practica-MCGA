@@ -13,9 +13,16 @@ const onSubmit = (values, dispatch) => {
     }
 }
 
+const mapStateToProps = (store) => {
+    return {
+        productos: store.productos.lista,
+        logged: store.auth.logged
+    }
+}
+
 const reduxFormConfig = {
     form: 'formProducto',
     onSubmit
 }
 
-export default connect(undefined)(reduxForm(reduxFormConfig)(Formulario))
+export default connect(mapStateToProps)(reduxForm(reduxFormConfig)(Formulario))

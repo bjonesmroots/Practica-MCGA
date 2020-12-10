@@ -25,6 +25,7 @@ class Login extends React.Component {
           <div className={css.title}>Login</div>
             <Field name="email" component={TextInput} type="text" />
             <Field name="password" component={TextInput} type="password" />
+            <div className={css.error}>{this.props.messageError}</div>
           <button
             type="button"
             className={css.button}
@@ -32,7 +33,6 @@ class Login extends React.Component {
           >
             {this.props.isFetching ? "Cargando" : "Iniciar sesión"}
           </button>
-          <div className={css.error}>{this.props.messageError}</div>
         </div>
       </div>
     )
